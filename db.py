@@ -1,3 +1,4 @@
+import pandas as pd
 import sqlite3
 
 
@@ -18,7 +19,7 @@ class Database:
 
     def set_username(self, user_id, username):
         with self.connection:
-            return self.cursor.execute("UPDATE users SET username = ? WHERE user_id = ?", (username, user_id))
+            return self.cursor.execute("UPDATE users SET username  = ? WHERE user_id = ?", (username, user_id))
 
     def set_active(self, user_id, active):
         with self.connection:
@@ -27,3 +28,7 @@ class Database:
     def get_users(self):
         with self.connection:
             return self.cursor.execute("SELECT user_id, active FROM users").fetchall()
+
+    def get_xlsx(self):
+        df = pd.read_sql("SELECT id, user_id, username, active FROM users", self.connection)
+        return df.to_excel(r'result.xlsx', index=False)

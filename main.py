@@ -54,14 +54,22 @@ async def sendall(message: types.Message):
     if message.from_user.id == 746671824:
         text = message.text[9:]
         for row in db.get_users():
-            try:
-                await bot.send_message(row[0], text)
-                if int(row[1]) != 1:
-                    db.set_active(row[0], 1)
-            except:
-                db.set_active(row[0], 0)
+            if int(row[1]) == 1:
+                try:
+                    await bot.send_message(row[0], text)
+                    # if int(row[1]) != 1:
+                    #     db.set_active(row[0], 1)
+                except:
+                    db.set_active(row[0], 0)
 
         await bot.send_message(message.from_user.id, "Рассылка завершена")
+
+
+@dp.message_handler(commands=['getxlsx'])
+async def sendall(message: types.Message):
+    if message.from_user.id == 746671824:
+        db.get_xlsx()
+        await message.reply_document(open('result.xlsx', 'rb'))
 
 
 @dp.message_handler()
