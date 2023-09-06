@@ -40,11 +40,11 @@ async def start(message: types.Message):
         if await check(config.channels, message.from_user.id):
             db.set_active(message.from_user.id, 1)
             await bot.send_message(message.from_user.id, 'Вы участвуете в конкурсе!'
-                                                         ' Чтобы отписаться от рассылки, используй команду /unsub')
+                                                         ' Чтобы отписаться, используй команду /unsub')
         else:
             db.set_active(message.from_user.id, 0)
             await bot.send_message(message.from_user.id, 'Проверь, что ты подписан на оба телеграм'
-                                                         ' канала и нажми кнопку еще раз!', reply_markup=startMarkup)
+                                                         ' канала и нажми кнопку еще раз!')
     else:
         flag = message.from_user.username
         username = flag if flag else message.from_user.first_name
@@ -54,11 +54,11 @@ async def start(message: types.Message):
             await bot.send_message(message.from_user.id, "Поздравляю! Ты участвуешь в конкурсе! "
                                                          " Если ты заблокируешь бота или отпишешься от каналов, ты "
                                                          "будешь автоматически исключен из списка участников конкурса."
-                                                         " Чтобы отписаться от рассылки, используй команду /unsub")
+                                                         " Чтобы отписаться, используй команду /unsub")
         else:
             db.set_active(message.from_user.id, 0)
             await bot.send_message(message.from_user.id, 'Проверь, что ты подписан на оба телеграм'
-                                                         ' канала и нажми кнопку еще раз!', reply_markup=startMarkup)
+                                                         ' канала и нажми кнопку еще раз!')
 
 
 @dp.message_handler(commands=['unsub'])
