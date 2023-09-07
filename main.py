@@ -76,14 +76,27 @@ async def sendall(message: types.Message):
         text = message.text[9:]
         for row in db.get_users():
             if int(row[1]) == 1:
-                try:
-                    await bot.send_message(row[0], text)
-                    # if int(row[1]) != 1:
-                    #     db.set_active(row[0], 1)
-                except:
-                    db.set_active(row[0], 0)
-
-        await bot.send_message(message.from_user.id, "Рассылка завершена")
+                if text == 'Проверка активности':
+                    if not await check(config.channels, row[0]):
+                        db.set_active(row[0], 0)
+                        try:
+                            await bot.send_message(row[0], "Внимание! Твое участвие в конкурсе аннулировано!"
+                                                           " Проверь подписку на 2 телеграм-канала!"
+                                                           " Чтобы получить на них ссылку, пиши <b>/start</b>",
+                                                   parse_mode='html')
+                        except:
+                            pass
+                else:
+                    try:
+                        await bot.send_message(row[0], text)
+                        # if int(row[1]) != 1:
+                        #     db.set_active(row[0], 1)
+                    except:
+                        db.set_active(row[0], 0)
+        if text == 'Проверка активности':
+            await bot.send_message(message.from_user.id, "Проверка завершена успешно")
+        else:
+            await bot.send_message(message.from_user.id, "Рассылка завершена успешно")
 
 
 @dp.message_handler(commands=['getxlsx'])
